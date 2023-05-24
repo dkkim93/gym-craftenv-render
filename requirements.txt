@@ -1,2 +1,4 @@
-gym
-matplotlib
+gym==0.26.2
+matplotlib==3.7.1
+minigrid
+gymnasium==0.28.1
