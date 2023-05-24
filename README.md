@@ -1,5 +1,6 @@
 # gym-craftenv-render
-code for rendering the craft environment in ["Modular Multitask Reinforcement Learning with Policy Sketches"](https://arxiv.org/pdf/1611.01796.pdf) (Andreas, Klein, Levine. ICML 2017) by using ["minigrid environment"](https://minigrid.farama.org/)
+code for rendering the craft environment in ["Modular Multitask Reinforcement Learning with Policy Sketches"](https://arxiv.org/pdf/1611.01796.pdf) (Andreas, Klein, Levine. ICML 2017). 
+This code uses ["minigrid environment"](https://minigrid.farama.org/) and adds ["gymnasium wrapper"](https://gymnasium.farama.org/api/wrappers/) to render the craft environment accordingly.
 
 ## Dependency
 Known dependencies are (please refer to `requirements.txt`):
