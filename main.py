@@ -6,9 +6,10 @@ from gymnasium import Wrapper
 
 
 class RenderWrapper(Wrapper):
-    def __init__(self, env):
+    def __init__(self, env, mapping):
         super().__init__(env)
         self.env = env
+        self.mapping = mapping
 
         # define map of agent direction to word
         self.DIR_TO_WORD = {
@@ -16,17 +17,6 @@ class RenderWrapper(Wrapper):
             1: "down",
             2: "left",
             3: "up"
-        }
-
-        # define map of minigrid object index to craft object
-        # minigrid object index ref: https://github.com/Farama-Foundation/Minigrid/blob/
-        # 34bfa2a6b3a963d7557ef43efa5e556fc8a6ca83/minigrid/core/constants.py#L24
-        # Map of object type to integers
-        self.IDX_TO_OBJECT = {
-            1: "empty",
-            2: "wall",
-            5: "wood",
-            6: "workbench",
         }
 
     def pad_boundary(self, image, pad_width=10):
@@ -59,7 +49,7 @@ class RenderWrapper(Wrapper):
         """
         # get minigrid map which has object indices, where each object index
         # corresponds to self.IDX_TO_OBJECT
-        minigrid = self.env.grid.encode()[:, :, 0]
+        minigrid = self.env.grid.encode()
 
         # initialize rendered_image
         rendered_image = []
@@ -75,7 +65,8 @@ class RenderWrapper(Wrapper):
                     image_row.append(cell_image)
                 else:
                     # render objects
-                    cell = self.IDX_TO_OBJECT[minigrid[row, col]]
+                    key = (minigrid[row, col][0], minigrid[row, col][-1])
+                    cell = self.mapping[key]
                     if cell == "wall":
                         continue
                     else:
@@ -94,8 +85,25 @@ class RenderWrapper(Wrapper):
 
 def main(args):
     # initialize env
-    env = gym.make("MiniGrid-Fetch-5x5-N2-v0")
-    env = RenderWrapper(env)
+    # env = gym.make("MiniGrid-Fetch-5x5-N2-v0")
+    env = gym.make("SGMG-Crafting-Bonus-v0")
+
+    # define map of minigrid object index to craft object
+    # minigrid object index ref: https://github.com/Farama-Foundation/Minigrid/blob/
+    # 34bfa2a6b3a963d7557ef43efa5e556fc8a6ca83/minigrid/core/constants.py#L24
+    IDX_TO_OBJECT = {
+        (1, 0): "empty",
+        (2, 0): "wall",
+        (13, 0): "wood",
+        (13, 1): "grass",
+        (13, 2): "iron",
+        (14, 3): "toolshed",
+        (14, 4): "workbench",
+        (14, 5): "factory"
+    }
+
+    # apply render wrapper with custom mapping
+    env = RenderWrapper(env, mapping=IDX_TO_OBJECT)
 
     # visualize env
     env.reset()

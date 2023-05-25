@@ -1,4 +1,5 @@
-gym==0.26.2
-matplotlib==3.7.1
-minigrid
-gymnasium==0.28.1
+gym
+matplotlib
+gymnasium
+minigrid==2.1.1
+sgminigrid @ git+https://github.com/anthliu/sgminigrid
